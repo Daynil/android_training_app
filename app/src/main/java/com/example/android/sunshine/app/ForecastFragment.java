@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -29,13 +32,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 public class ForecastFragment extends Fragment {
 
     private ArrayAdapter<String> mForecastAdapter;
 
     public ForecastFragment() {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
     }
 
     @Override
@@ -53,8 +61,7 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-            fetchWeatherTask.execute("gulf-breeze,fl");
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -65,24 +72,37 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        String[] forecastArray = {
-                "Today - Sunny - 88 / 63",
-                "Tomorrow - Foggy - 70 / 46",
-                "Weds - Cloudy - 72 / 63",
-                "Thurs - Rainy - 64 / 51",
-                "Fri - Foggy - 70 / 46",
-                "Sat - Sunny - 76 / 68",
-        };
-        List<String> weekForcast = new ArrayList<String>(Arrays.asList(forecastArray));
-        mForecastAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.list_item_forcast, R.id.list_item_forecast_textview, weekForcast);
+        mForecastAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.list_item_forcast,
+                R.id.list_item_forecast_textview,
+                new ArrayList<String>());
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String weatherText = mForecastAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, weatherText);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
 
+    private void updateWeather() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        String location = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(getString(R.string.pref_location_key),
+                        getString(R.string.pref_location_default));
+        String units = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(getString(R.string.pref_units_key),
+                        getString(R.string.pref_units_default));
+        weatherTask.execute(location, units);
 
+    }
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
@@ -98,7 +118,7 @@ public class ForecastFragment extends Fragment {
             String forecastJsonStr = null;
 
             String format = "json";
-            String units = "imperial";
+            String units = "metric";
             int numDays = 7;
 
             try {
@@ -173,13 +193,14 @@ public class ForecastFragment extends Fragment {
                 }
             }
             try {
-                String[] formattedWeater = getWeatherDataFromJson(forecastJsonStr, numDays);
+                String[] formattedWeather = getWeatherDataFromJson(forecastJsonStr, numDays,
+                        params[1]);
                 // A nice way to log an array:
                 //for (int i=0; i<formattedWeater.length; i++) {
                 //    Log.v("ForecastFragment", "Day: " + Integer.toString(i) + " " +
                 //            formattedWeater[i]);
                 //}
-                return formattedWeater;
+                return formattedWeather;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -212,13 +233,30 @@ public class ForecastFragment extends Fragment {
         /**
          * Prepare the weather high/lows for presentation.
          */
-        private String formatHighLows(double high, double low) {
-            // For presentation, assume the user doesn't care about tenths of a degree.
-            long roundedHigh = Math.round(high);
-            long roundedLow = Math.round(low);
-
-            String highLowStr = roundedHigh + "/" + roundedLow;
+        private String formatHighLows(double high, double low, String units) {
+            String highLowStr = reconcileUnits(units, high, low);
+            //String highLowStr = roundedHigh + "/" + roundedLow;
             return highLowStr;
+        }
+
+        /**
+         * Database will spit out metric by default. If preference is metric, return it right away.
+         * If preference is imperial, perform conversion from received metric.
+         * */
+        private String reconcileUnits(String units, double high, double low) {
+            if (units.equals("metric")) {
+                long roundedHigh = Math.round(high);
+                long roundedLow = Math.round(low);
+                return roundedHigh + "/" + roundedLow;
+            } else {
+                long impHigh = Math.round(convertToImperial(high));
+                long impLow = Math.round(convertToImperial(low));
+                return impHigh + "/" + impLow;
+            }
+        }
+
+        private double convertToImperial(double metricTemp) {
+            return ((metricTemp*9) / 5) + 32;
         }
 
         /**
@@ -228,7 +266,7 @@ public class ForecastFragment extends Fragment {
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
-        private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
+        private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays, String units)
                 throws JSONException {
 
             // These are the names of the JSON objects that need to be extracted.
@@ -269,7 +307,7 @@ public class ForecastFragment extends Fragment {
                 double high = temperatureObject.getDouble(OWM_MAX);
                 double low = temperatureObject.getDouble(OWM_MIN);
 
-                highAndLow = formatHighLows(high, low);
+                highAndLow = formatHighLows(high, low, units);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
