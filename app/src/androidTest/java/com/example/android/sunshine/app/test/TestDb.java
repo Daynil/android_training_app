@@ -78,7 +78,7 @@ public class TestDb extends AndroidTestCase {
         // A cursor is your primary interface to the query results.
         Cursor cursor = db.query(
                 LocationEntry.TABLE_NAME,  // Table to Query
-                columns,
+                columns, // null for all - as here
                 null, // Columns for the "where" clause
                 null, // Values for the "where" clause
                 null, // columns to group by
@@ -86,7 +86,7 @@ public class TestDb extends AndroidTestCase {
                 null // sort order
         );
         validateCursor(cursor, testValues);
-        /* TODO The preceding replaces all the following code...how?
+        /* TODO The preceding replaces all the following code
         // If possible, move to the first row of the query results.
         if (cursor.moveToFirst()) {
         // Can call validateCursor(cursor, testValues) instead of all following - don't get it?
@@ -131,7 +131,7 @@ public class TestDb extends AndroidTestCase {
                 null, null, null, null, null, null);
 
         validateCursor(weatherCursor, weatherValues);
-        /* TODO The preceding replaces all following code - how?
+        /* The preceding replaces all following code
         if (weatherCursor.moveToFirst()) {
             int dateTextIndex = weatherCursor.getColumnIndex(WeatherEntry.COLUMN_DATETEXT);
             String dateText = weatherCursor.getString(dateTextIndex);
