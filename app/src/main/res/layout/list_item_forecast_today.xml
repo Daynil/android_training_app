@@ -7,32 +7,39 @@
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:padding="16dp">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_item_icon"
-        android:layout_weight="0"
-        android:src="@drawable/ic_launcher" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp">
+        android:paddingLeft="16dp"
+        android:gravity="center_horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/list_item_date_textview"
-            android:text="Tomorrow" />
+            android:text="Tomorrow"
+            android:paddingTop="15dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/list_item_forecast_textview"
-            android:text="Clear" />
+            android:id="@+id/list_item_high_textview"
+            android:text="65"
+            android:singleLine="true"
+            android:textSize="30dp"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9"
+            android:id="@+id/list_item_low_textview"
+            android:password="false"
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 
@@ -40,22 +47,21 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:gravity="center">
+        android:layout_weight="1"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/list_item_icon"
+            android:src="@drawable/ic_launcher" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/list_item_high_textview"
-            android:text="65"
-            android:singleLine="true" />
+            android:id="@+id/list_item_forecast_textview"
+            android:text="Clear" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="9"
-            android:id="@+id/list_item_low_textview"
-            android:password="false" />
     </LinearLayout>
 
 </LinearLayout>
