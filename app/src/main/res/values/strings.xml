@@ -19,6 +19,22 @@
     <string name="pref_units_title">Units</string>
     <string name="map_location">Map Location</string>
     <string name="share">Share</string>
+
+    <!-- Label for the temperature units preference [CHAR LIMIT=30] -->
+    <string name="pref_units_label">Temperature Units</string>
+
+    <!-- Label for metric option in temperature unit preference [CHAR LIMIT=25] -->
+    <string name="pref_units_label_metric">Metric</string>
+
+    <!-- Label for imperial option in temperature unit preference [CHAR LIMIT=25] -->
+    <string name="pref_units_label_imperial">Imperial</string>
+
+    <!-- Value in SharedPreferences for metric temperature unit option [CHAR LIMIT=NONE] -->
+    <string name="pref_units_metric" translatable="false">metric</string>
+
+    <!-- Value in SharedPreferences for imperial temperature unit option [CHAR LIMIT=NONE] -->
+    <string name="pref_units_imperial" translatable="false">imperial</string>
+
     <string-array name="pref_units_entries">
         <item>Metric</item>
         <item>Imperial</item>
