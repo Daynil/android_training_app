@@ -8,18 +8,50 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Date;
 
-public class MainActivity extends ActionBarActivity {
+
+public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
+
+    public boolean mTwoPane;
+
+    @Override
+    public void onItemSelected(String date) {
+        if (mTwoPane) {
+            DetailFragment detFrag = DetailFragment.newInstance(date);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, detFrag)
+                    .commit();
+        } else {
+            Intent  intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(Intent.EXTRA_TEXT, date);
+            startActivity(intent);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
-                    .commit();
+        if (findViewById(R.id.weather_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600). If this view is present, then the activity should be
+            // in two-pane mode
+            mTwoPane = true;
+
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+                String date = new Date().toString();
+                DetailFragment detFrag = DetailFragment.newInstance(date);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.weather_detail_container, detFrag)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
         }
     }
 

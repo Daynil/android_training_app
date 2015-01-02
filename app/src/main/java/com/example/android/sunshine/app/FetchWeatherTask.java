@@ -105,7 +105,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
             //Log.v("ForecastFragment", "Forecast JSON String: " + forecastJsonStr);
         } catch (IOException e) {
-            Log.e("PlaceholderFragment", "Error ", e);
+            Log.e("DetailFragment", "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
             forecastJsonStr = null;
@@ -117,7 +117,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e("PlaceholderFragment", "Error closing stream", e);
+                    Log.e("DetailFragment", "Error closing stream", e);
                 }
             }
         }
