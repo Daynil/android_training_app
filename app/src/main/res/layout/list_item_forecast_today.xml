@@ -5,41 +5,12 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:padding="16dp">
+    android:background="@color/sunshine_blue">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingLeft="16dp"
-        android:gravity="center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/list_item_date_textview"
-            android:text="Tomorrow"
-            android:paddingTop="15dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/list_item_high_textview"
-            android:text="65"
-            android:singleLine="true"
-            android:textSize="30dp"
-            android:layout_gravity="center_horizontal"
-            android:paddingTop="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="9"
-            android:id="@+id/list_item_low_textview"
-            android:password="false"
-            android:textSize="20dp"
-            android:layout_gravity="center_horizontal" />
+        android:paddingLeft="60dp">
 
     </LinearLayout>
 
@@ -48,16 +19,57 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center_horizontal">
+        android:background="@drawable/touch_selector"
+        android:gravity="center_vertical|left">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_item_date_textview"
+            android:textColor="@android:color/white"
+            android:text="Tomorrow"
+            android:textSize="22sp"
+            android:paddingTop="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_item_high_textview"
+            android:textColor="@android:color/white"
+            android:text="65"
+            android:singleLine="true"
+            android:textSize="72sp"
+            android:paddingTop="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="9"
+            android:id="@+id/list_item_low_textview"
+            android:password="false"
+            android:textSize="36sp"
+            android:paddingBottom="10dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/list_item_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
             android:id="@+id/list_item_forecast_textview"
             android:text="Clear" />
 
