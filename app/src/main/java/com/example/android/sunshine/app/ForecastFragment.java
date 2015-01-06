@@ -4,12 +4,10 @@ package com.example.android.sunshine.app;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -179,11 +177,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
+
         Intent intent = new Intent(getActivity(), SunshineService.class);
         intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,
                 Utility.getPreferredLocation(getActivity()));
         getActivity().startService(intent);
 
+        /*
         mAlarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
         Intent intent1 = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
         intent1.putExtra(SunshineService.LOCATION_QUERY_EXTRA,
@@ -191,6 +191,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         alarmIntent = PendingIntent.getBroadcast(getActivity(), 0, intent1, 0);
         mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + 10*1000, alarmIntent);
+        */
+
     }
 
     @Override
